@@ -302,6 +302,7 @@ namespace json
                         val.ltrim(space);
                         while (!val.empty() && !val.starts_with('}'))
                         {
+                                val.ltrim(space);
                                 if (!val.starts_with('"'))
                                 {
                                         JSON_WARNING("object::parse, does not start with \", val: '%.*s', prev: '%.*s'\n",
@@ -313,7 +314,7 @@ namespace json
                                 subbuffer key = val.before('"');
                                 val.advance(key.length() + 1);
                                 val.ltrim(spacecolon);
-                                // next char should be " or numeric or null
+                                // next char should be " or numeric or { or [ or null
                                 if (val.at(0) == ',')
                                 {
                                         val.trim(spacecomma);
@@ -382,7 +383,7 @@ namespace json
                 {
                         m_sval = val;
                         if (!val.starts_with('[')) return false;
-                        val.ltrim('[').ltrim(space);
+                        val.advance(1).ltrim(space);
 
                         while (!val.empty() && !val.starts_with(']'))
                         {
